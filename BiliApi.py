@@ -21,7 +21,13 @@ def ep2bvid(bzurl, urlcase):
     #print(ep2id_json)
     if urlcase == 3:
         VideoName = ep2id_json['h1Title']
-        return ep2id_json['epList'][0]['bvid']
+        epid = bzurl.find('ep') + 2
+        for index in range(len(ep2id_json['epList'])):
+            if str(ep2id_json['epList'][index]['id']) == str(bzurl[epid: epid+7]):
+                return_bvid = ep2id_json['epList'][index]['bvid']
+                break
+
+        return return_bvid
     elif urlcase == 1:
         VideoName = ep2id_json['videoData']['title']
         return bzurl[31:43]
@@ -32,6 +38,12 @@ def ep2bvid(bzurl, urlcase):
 
 def main_handler(event, context):
     global VideoName
+    '''
+    print("Received event: " + json.dumps(event, indent = 2)) 
+    print("Received context: " + str(context))
+    print("Hello world")
+    return("Hello World")
+    '''
     bzurl = event['path'][6:]
 
     if len(bzurl) > 43:
@@ -69,10 +81,27 @@ def main_handler(event, context):
         partname = getCid_json['data'][partid-1]['part']
     else:
         cid = getCid_json['data'][0]['cid']
-    
+    #print(getCid_json['data'][partid-1])
+
+    '''
+    getName_url = 'https://api.bilibili.com/x/web-interface/archive/desc?&bvid=' + bvid + '&jsonp=jsonp'
+    getName_headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    getName_data = {}
+    getName_cookies = cookies
+    getName_response = requests.get(url = getName_url, data=getName_data, headers=getName_headers, cookies=getName_cookies)
+    getName_result = getName_response.content.decode("utf-8")
+    getName_json = json.loads(getName_result)
+    if urlcase == 1:
+        VideoName = getName_json['data'] + ' ' + partname
+    elif urlcase == 2:
+        VideoName = getName_json['data']
+    elif urlcase == 3:
+        VideoName = getCid_json['data'][0]['part']
+    '''
     if urlcase == 1:
         VideoName += ' '
         VideoName += partname
+
 
     getSource_url = 'http://api.bilibili.com/x/player/playurl?cid=' + str(cid) + '&bvid=' + str(bvid) + '&jsonp=jsonp'
     getSource_headers = {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -92,6 +121,7 @@ def main_handler(event, context):
     #print(imagenameArray)
     json_media = {'VideoUrl':'',
                 'VideoName':'',
+                'VideoLength':'',
                 '高清 1080P60':'',
                 '高清 720P60':'',
                 '高清 1080P+':'',
@@ -116,7 +146,7 @@ def main_handler(event, context):
         json_media[imagename] = downurl
         print(getSourceAgain_url)
     json_media['VideoName'] = VideoName
-
+    json_media['VideoLength'] = str(int(int(getSourceAgain_json['data']['durl'][0]['length']) / 1000))
     json_outstr = base64.b64encode(str(json_media).encode('utf-8')).decode('utf-8')
     json_out = {'Warnning':'Please Replace ?p=X To -p=X',
                 'Encode':'Base64',
@@ -126,4 +156,5 @@ def main_handler(event, context):
     json_out['VideoUrl'] = bzurl           
     json_out['ParseResult'] = json_outstr
 
+    #return json_media
     return json_out
