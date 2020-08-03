@@ -12,8 +12,19 @@ def main_handler(event, context):
     print("Received context: " + str(context))
     print("Hello world")
 
-    videoid = videourl[30:37]
-    videotitle = videourl[23:29]
+    #videoid = videourl[30:37]
+    #videotitle = videourl[23:29]
+
+    mangob = 'www.mgtv.com/b/'
+    mangohtml = '.html'
+    left_index = videourl.find(mangob)
+    left_index += len(mangob)
+    right_index = videourl.find(mangohtml)
+    video_param = videourl[left_index: right_index]
+    video_param_array = video_param.split('/')
+    videoid = video_param_array[1]
+    videotitle = video_param_array[0]
+    
     cookies = {'Your Cookies':'Json Format'}
     did = cookies['__STKUUID']
     timestamp = int(time.time())
@@ -23,7 +34,7 @@ def main_handler(event, context):
     mango_getname_cookies = cookies
     mango_getname_response = requests.get(url = mango_getname_api, headers = mango_getname_headers, cookies=mango_getname_cookies)
     mango_getname_result = mango_getname_response.content.decode("utf-8")
-    mango_getname_result_dict = json.loads(mango_getname_result)
+    mango_getname_result_dict = json.loads(mango_getname_result[17:-1])
 
     mango_videoname = mango_getname_result_dict['data']['info']['videoName']
     mango_videotitle = mango_getname_result_dict['data']['info']['title']
