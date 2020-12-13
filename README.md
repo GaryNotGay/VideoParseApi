@@ -16,4 +16,10 @@ Some Video Platforms‘ Parse Api
 ~ Iqiyi      api.sometools.online/iqiyipc/WEBSITE  
           https://www.iqiyi.com/v_XXXXXXXXXXX.html   
           
+~ TencentVideoV2      api.sometools.online/qqv2/WEBSITE  
+               https://v.qq.com/x/cover/mzc00200XXXXX.html  
+               https://v.qq.com/x/cover/mzc00200XXXXX/YYYYY.html     
+               https://v.qq.com/x/cover/XXXXX/YYYYY.html      
+               ……       
+          
 ~ To be continued
