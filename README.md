@@ -14,12 +14,12 @@ Some Video Platforms‘ Parse Api
                https://v.qq.com/x/cover/mzc00200XXXXX/YYYYY.html     
      
 ~ Iqiyi      api.sometools.online/iqiyipc/WEBSITE  
-          https://www.iqiyi.com/v_XXXXXXXXXXX.html   
+          https://www.iqiyi.com/v_XXXXX.html   
           
 ~ TencentVideoV2      api.sometools.online/qqv2/WEBSITE  
-               https://v.qq.com/x/cover/mzc00200XXXXX.html  
-               https://v.qq.com/x/cover/mzc00200XXXXX/YYYYY.html     
-               https://v.qq.com/x/cover/XXXXX/YYYYY.html      
-               ……       
+               https://v.qq.com/x/cover/XXXXX.html?vid=YYYYY  
+               https://v.qq.com/x/cover/XXXXX/YYYYY.html     
+               https://v.qq.com/x/cover/XXXXX.html      
+               https://v.qq.com/x/page/XXXXX.html        
           
 ~ To be continued
