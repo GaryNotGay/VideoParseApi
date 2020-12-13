@@ -154,10 +154,11 @@ def cookie2header():
     return cookies
 
 # Powerd By Zsaim
-def getid(url):  
+def getid(url):
     mode = [
         '.*v\.qq\.com/x/cover/(.*)\.html\?vid=(.*)',
         '.*v\.qq\.com/x/cover/(.*)/(.*)\.html',
+        '.*v\.qq\.com/x/cover/(.*)\.html',
         '.*v\.qq\.com/x/page/(.*)\.html',
     ]
     for _ in mode:
@@ -170,8 +171,24 @@ def getid(url):
             if len(matchres) == 2:
                 coverid = matchres[0]
             else:
-                coverid = ""
+                if url.find('cover') != -1:
+                    coverid = vid
+                    vid = getvid(url)
+                else:
+                    coverid = ""
     return vid, coverid
+
+def getvid(url):
+    response = requests.get(url)
+    result = response.content.decode('utf-8')
+    start = result.find('var VIDEO_INFO')
+    index = start+1+len('var VIDEO_INFO')
+    while result[index] != '}':
+        index += 1
+    #print(result[start+len('var VIDEO_INFO')+3: index+1])
+    video_info = json.loads(result[start+len('var VIDEO_INFO')+3: index+1])
+    #return video_info['title'], video_info['duration']   #, video_info['vid']
+    return video_info['vid']
 
 def getVideoInfo(url):
     response = requests.get(url)
